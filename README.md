@@ -14,3 +14,22 @@ Java CRUD Postgres
 . . .
 
 Because I can never remember the path in VS Code where to set JAVA - C:\Users\{USERNAME}\AppData\Roaming\Code\User\settings.json
+
+To quickly refresh environment variables in PowerShell session in VS Code:
+
+```powershell
+Import-Module $env:ChocolateyInstall\helpers\chocolateyProfile.psm1
+refreshenv
+```
+
+```powershell
+mvn -v
+```
+
+```powershell
+mvn -DskipTests package
+```
+
+chicken
+
+.
