@@ -15,6 +15,13 @@ Java CRUD Postgres
 
 Because I can never remember the path in VS Code where to set JAVA - C:\Users\{USERNAME}\AppData\Roaming\Code\User\settings.json
 
+```powershell
+choco install maven
+```
+
+Maven Path:
+Maven home: C:\ProgramData\chocolatey\lib\maven\apache-maven-3.9.11
+
 To quickly refresh environment variables in PowerShell session in VS Code:
 
 ```powershell
@@ -27,9 +34,45 @@ mvn -v
 ```
 
 ```powershell
+# skip tests.
 mvn -DskipTests package
+
+# build package and do tests.
+mvn clean package
 ```
 
 chicken
+
+.
+
+Frontend
+
+```powershell
+cd ./frontend
+
+docker build -t frontend .
+
+docker network create app-network
+docker run -d -p 3000:80 --name frontend --network app-network frontend
+```
+
+Backend
+
+```powershell
+docker run -d --name postgres-local-db `
+--network app-network `
+-e POSTGRES_PASSWORD=password `
+-e POSTGRES_DB=appdb `
+postgres
+
+docker build -t backend .
+
+docker run -d --name backend `
+--network app-network `
+-e SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-local-db:5432/appdb `
+-p 8080:8080 `
+backend
+
+```
 
 .

@@ -1,3 +1,21 @@
 spring:
   application:
     name: java-crud-postgres
+
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:mydb}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:password}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    # 'update' will automatically create/update tables based on your Java Entity
+    # In production (Azure), you might change this to 'validate'
+    hibernate:
+      ddl-auto: update
+    # Show SQL in logs (helpful for debugging)
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
