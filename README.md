@@ -2,7 +2,7 @@
 
 Java CRUD Postgres
 
-## chicken nuggets to refer to later.
+## chicken nuggets to refer to later
 
 - <https://medium.com/@bhargavkanjarla01/how-to-combine-a-java-spring-boot-back-end-with-a-reactjs-front-end-app-ed8d8ca65285>
 - <https://github.com/MSpilari/fullstack-app-deploy-render>
