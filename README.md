@@ -12,3 +12,5 @@ Java CRUD Postgres
 - <https://dev.to/bansikah/building-a-user-crud-application-with-spring-boot-and-docker-521n>
 
 . . .
+
+Because I can never remember the path in VS Code where to set JAVA - C:\Users\{USERNAME}\AppData\Roaming\Code\User\settings.json
