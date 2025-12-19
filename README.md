@@ -49,9 +49,7 @@ Frontend
 
 ```powershell
 cd ./frontend
-
 docker build -t frontend .
-
 docker network create app-network
 docker run -d -p 3000:80 --name frontend --network app-network frontend
 ```
@@ -76,3 +74,12 @@ backend
 ```
 
 .
+
+Rebuilding Frontend for Development purposes.
+
+```powershell
+docker rm -f frontend 
+docker build -t frontend .
+docker run -d -p 3000:80 --name frontend --network app-network frontend
+
+```

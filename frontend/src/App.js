@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import './App.css';
 
 function App() {
   // State for form fields
@@ -15,6 +16,14 @@ function App() {
   // API URL - In production/Azure, this would be an environment variable
   const API_URL = "http://localhost:8080/api/entries";
 
+  // Dark mode state
+  const [darkMode, setDarkMode] = useState(true);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('darkMode');
+    if (saved) setDarkMode(saved === 'true');
+  }, []);
+  
   // 1. Load entries on page load
   useEffect(() => {
     fetchEntries();
@@ -72,25 +81,80 @@ function App() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const toggleDarkMode = () => {
+    setDarkMode((d) => {
+      localStorage.setItem('darkMode', String(!d));
+      return !d;
+    });
+  };
+
+  // width used for lastName, description and location (keeps them aligned)
+  const secondaryWidth = '300px';
+  const gap = 10; // px gap between the two fields
+  const containerWidth = `${parseInt(secondaryWidth, 10) * 2 + gap}px`; // combined width for description/location
+
+  const theme = {
+    background: darkMode ? '#1e1e1e' : '#ffffff',
+    text: darkMode ? '#e6e6e6' : '#111111',
+    panel: darkMode ? '#2a2a2a' : '#ffffff',
+    border: darkMode ? '#3a3a3a' : '#ddd',
+    muted: darkMode ? '#8a8a8a' : '#666'
+  };
+
+  const inputBase = {
+    padding: '8px',
+    borderRadius: '4px',
+    border: `1px solid ${theme.border}`,
+    background: theme.panel,
+    color: theme.text
+  };
+
+  // button color variables
+  const listBg = '#0e54ebff';
+  const listHover = '#0a4bd6ff';
+  const submitBg = '#28a745';
+  const submitHover = '#218838';
+  const deleteBg = '#dc3545';
+  const deleteHover = '#c82333';
+
   return (
-    <div style={{ padding: '40px', fontFamily: 'sans-serif' }}>
-      <h1>User Entry Portal</h1>
+    <div className="app-root" style={{ background: theme.background, color: theme.text,
+                  ['--btn-submit-bg']: submitBg,
+                  ['--btn-submit-hover']: submitHover,
+                  ['--btn-delete-bg']: deleteBg,
+                  ['--btn-delete-hover']: deleteHover,
+                  ['--theme-text']: theme.text,
+                  ['--theme-border']: theme.border,
+                  ['--theme-panel']: theme.panel,
+                  ['--secondary-hover-bg']: (darkMode ? '#333' : '#f0f0f0'),
+                  ['--secondary-width']: secondaryWidth, 
+                  ['--gap']: `${gap}px`,
+                  ['--container-width']: containerWidth,
+                  ['--table-header-bg']: (darkMode ? '#2b2b2b' : '#f4f4f4') }}>
+      <div className="app-header">
+        <h1 className="title">User Entry Portal</h1>
+        <button onClick={toggleDarkMode} className="toggle-btn">{darkMode ? 'Light Mode' : 'Dark Mode'}</button>
+      </div>
 
       {/* --- FORM SECTION --- */}
-      <section style={{ marginBottom: '40px', border: '1px solid #ddd', padding: '20px', borderRadius: '8px' }}>
+      <section className="form-section">
         <h3>Add New Entry</h3>
-        <form onSubmit={handleSubmit}>
-          <div style={{ marginBottom: '10px' }}>
-            <input name="firstName" placeholder="First Name" value={formData.firstName} onChange={handleChange} required />
-            <input name="lastName" placeholder="Last Name" value={formData.lastName} onChange={handleChange} required style={{ marginLeft: '10px' }} />
+        <form onSubmit={handleSubmit} className="entry-form">
+          <div className="row">
+            <input name="firstName" placeholder="First Name" value={formData.firstName} onChange={handleChange} required className="text-input text-input--secondary" />
+            <input name="lastName" placeholder="Last Name" value={formData.lastName} onChange={handleChange} required className="text-input text-input--secondary" />
           </div>
+
+          {/* Description below and same combined width as both fields */}
           <div style={{ marginBottom: '10px' }}>
-            <input name="description" placeholder="Description" value={formData.description} onChange={handleChange} required style={{ width: '300px' }} />
+            <input name="description" placeholder="Description" value={formData.description} onChange={handleChange} required className="text-input text-input--full" />
           </div>
+
+          {/* Location below and same combined width as both fields */}
           <div style={{ marginBottom: '10px' }}>
-            <input name="location" placeholder="Location" value={formData.location} onChange={handleChange} required />
+            <input name="location" placeholder="Location" value={formData.location} onChange={handleChange} required className="text-input text-input--full" />
           </div>
-          <button type="submit" style={{ backgroundColor: '#28a745', color: 'white', border: 'none', padding: '10px 20px', cursor: 'pointer' }}>
+          <button type="submit" className="btn btn-submit">
             Submit
           </button>
         </form>
@@ -98,14 +162,14 @@ function App() {
 
       {/* --- LIST ACTIONS --- */}
       <div style={{ marginBottom: '20px' }}>
-        <button onClick={fetchEntries} style={{ marginRight: '10px' }}>Refresh Entries</button>
-        <button onClick={fetchEntries}>List Existing Entries</button>
+        <button onClick={fetchEntries} className="btn btn-secondary mr-10">Refresh Entries</button>
+        <button onClick={fetchEntries} className="btn btn-secondary">List Existing Entries</button>
       </div>
 
       {/* --- DATA TABLE --- */}
-      <table border="1" cellPadding="10" style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+      <table border="1" cellPadding="10" className="data-table">
         <thead>
-          <tr style={{ backgroundColor: '#f4f4f4' }}>
+          <tr>
             <th>First Name</th>
             <th>Last Name</th>
             <th>Description</th>
@@ -122,9 +186,9 @@ function App() {
                 <td>{entry.description}</td>
                 <td>{entry.location}</td>
                 <td>
-                  <button 
-                    onClick={() => handleDelete(entry.id)} 
-                    style={{ backgroundColor: '#dc3545', color: 'white', border: 'none', padding: '5px 10px', cursor: 'pointer' }}
+                  <button
+                    onClick={() => handleDelete(entry.id)}
+                    className="btn btn-delete"
                   >
                     Delete
                   </button>
