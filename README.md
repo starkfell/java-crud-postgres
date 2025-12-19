@@ -52,6 +52,7 @@ cd ./frontend
 docker build -t frontend .
 docker network create app-network
 docker run -d -p 3000:80 --name frontend --network app-network frontend
+
 ```
 
 Backend
@@ -61,6 +62,7 @@ docker run -d --name postgres-local-db `
 --network app-network `
 -e POSTGRES_PASSWORD=password `
 -e POSTGRES_DB=appdb `
+-p 5432:5432 `
 postgres
 
 docker build -t backend .
